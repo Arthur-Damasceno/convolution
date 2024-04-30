@@ -1,0 +1,6 @@
+[package]
+name = "ecg_convolution"
+description = "Processing ECG data with convolution filters"
+version = "0.1.0"
+authors = ["Arthur Damasceno <damascenoarthur653@gmail.com>"]
+edition = "2021"
