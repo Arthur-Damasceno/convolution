@@ -65,7 +65,7 @@ impl ECGData {
     }
 
     pub fn save(&self, path: &str) -> io::Result<()> {
-        let mut file = File::open(path)?;
+        let mut file = File::create(path)?;
 
         writeln!(file, "{}", self.0.len())?;
 
