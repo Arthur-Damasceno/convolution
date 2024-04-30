@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "ecg_convolution"
+name = "ecg"
 version = "0.1.0"

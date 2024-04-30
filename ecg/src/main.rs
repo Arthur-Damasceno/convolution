@@ -1,6 +1,6 @@
 use std::{io::Result, env};
 
-use ecg_convolution::ECGData;
+use ecg::ECGData;
 
 fn main() -> Result<()> {
     let path_read = env::var("PATH_READ").unwrap_or("data/sample_ecg.txt".into());
