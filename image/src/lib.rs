@@ -64,6 +64,52 @@ impl Image {
         }
     }
 
+    pub fn convolve(&self, kernel: &Kernel) -> Self {
+        let mut pixels = Vec::new();
+
+        for (position, pixel) in self.pixels.iter().enumerate() {
+            let mut sum = 0.;
+
+            if let Some(value) = self.get_pixel(position, -1, -1) {
+                sum += value as f64 * kernel[2][2];
+            }
+
+            if let Some(value) = self.get_pixel(position, -1, 0) {
+                sum += value as f64 * kernel[2][1];
+            }
+
+            if let Some(value) = self.get_pixel(position, -1, 1) {
+                sum += value as f64 * kernel[2][0];
+            }
+
+            if let Some(value) = self.get_pixel(position, 0, -1) {
+                sum += value as f64 * kernel[1][2];
+            }
+
+            sum += *pixel as f64 * kernel[1][1];
+
+            if let Some(value) = self.get_pixel(position, 0, 1) {
+                sum += value as f64 * kernel[1][0];
+            }
+
+            if let Some(value) = self.get_pixel(position, 1, -1) {
+                sum += value as f64 * kernel[0][2];
+            }
+
+            if let Some(value) = self.get_pixel(position, 1, 0) {
+                sum += value as f64 * kernel[0][1];
+            }
+
+            if let Some(value) = self.get_pixel(position, 1, 1) {
+                sum += value as f64 * kernel[0][0];
+            }
+
+            pixels.push(sum as u8);
+        }
+
+        Self { pixels, width: self.width }
+    }
+
     pub fn save(&self, path: &str) -> io::Result<()> {
         let mut file = File::create(path)?;
         let (width, height) = (self.width, self.height());
@@ -81,3 +127,5 @@ impl Image {
         Ok(())
     }
 }
+
+type Kernel = [[f64; 3]; 3];
