@@ -1,6 +1,6 @@
 use std::{
     fs::File,
-    io::{self, Error, ErrorKind, Read},
+    io::{self, Error, ErrorKind, Read, Write},
     num::ParseIntError,
 };
 
@@ -52,5 +52,22 @@ impl Image {
 
     pub fn height(&self) -> usize {
         self.pixels.len() / self.width
+    }
+
+    pub fn save(&self, path: &str) -> io::Result<()> {
+        let mut file = File::create(path)?;
+        let (width, height) = (self.width, self.height());
+
+        writeln!(&mut file, "P2\n{width} {height}\n255")?;
+
+        for rows in self.pixels.chunks(width) {
+            for pixel in rows {
+                write!(&mut file, "{pixel} ")?;
+            }
+
+            writeln!(&mut file)?;
+        }
+
+        Ok(())
     }
 }
