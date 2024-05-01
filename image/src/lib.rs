@@ -144,6 +144,19 @@ impl Image {
         }
     }
 
+    pub fn treshold(&self, value: u8) -> Self {
+        let pixels = self
+            .pixels
+            .iter()
+            .map(|pixel| if pixel >= &value { 255 } else { 0 })
+            .collect();
+
+        Self {
+            pixels,
+            width: self.width,
+        }
+    }
+
     pub fn save(&self, path: &str) -> io::Result<()> {
         let mut file = File::create(path)?;
         let (width, height) = (self.width, self.height());
