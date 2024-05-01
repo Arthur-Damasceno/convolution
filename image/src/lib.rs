@@ -54,6 +54,16 @@ impl Image {
         self.pixels.len() / self.width
     }
 
+    fn get_pixel(&self, position: usize, rows: isize, columns: isize) -> Option<u8> {
+        let index = position as isize + rows * self.width as isize + columns;
+
+        if index >= 0 {
+            self.pixels.get(index as usize).map(|pixel| *pixel)
+        } else {
+            None
+        }
+    }
+
     pub fn save(&self, path: &str) -> io::Result<()> {
         let mut file = File::create(path)?;
         let (width, height) = (self.width, self.height());
