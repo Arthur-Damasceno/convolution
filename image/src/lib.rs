@@ -110,6 +110,10 @@ impl Image {
         Self { pixels, width: self.width }
     }
 
+    pub fn mean_filter(&self) -> Self {
+        self.convolve(&MEAN_KERNEL)
+    }
+
     pub fn save(&self, path: &str) -> io::Result<()> {
         let mut file = File::create(path)?;
         let (width, height) = (self.width, self.height());
@@ -128,4 +132,6 @@ impl Image {
     }
 }
 
-type Kernel = [[f64; 3]; 3];
+pub type Kernel = [[f64; 3]; 3];
+
+pub const MEAN_KERNEL: Kernel = [[1./9.; 3]; 3];
