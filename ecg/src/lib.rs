@@ -30,7 +30,11 @@ impl ECGData {
         let mut data = Vec::with_capacity(self.0.len() + kernel.len() - 1);
 
         for i in 0..self.0.len() - 1 {
-            let max = if i >= kernel.len() { kernel.len() } else { i + 1 };
+            let max = if i >= kernel.len() {
+                kernel.len()
+            } else {
+                i + 1
+            };
             let mut sum = 0.;
 
             for j in 0..max {

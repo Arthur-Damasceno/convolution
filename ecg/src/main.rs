@@ -1,4 +1,4 @@
-use std::{io::Result, env};
+use std::{env, io::Result};
 
 use ecg::ECGData;
 

@@ -5,3 +5,7 @@ version = 3
 [[package]]
 name = "ecg"
 version = "0.1.0"
+
+[[package]]
+name = "image"
+version = "0.1.0"

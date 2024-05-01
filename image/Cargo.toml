@@ -1,0 +1,6 @@
+[package]
+name = "image"
+description = "Applying filters to an image with convolution"
+version = "0.1.0"
+authors = ["Arthur Damasceno <damascenoarthur653@gmail.com>"]
+edition = "2021"
