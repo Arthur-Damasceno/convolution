@@ -64,7 +64,7 @@ impl Image {
         }
     }
 
-    pub fn convolve(&self, kernel: &Kernel) -> Self {
+    pub fn convolve(&self, kernel: &Kernel) -> Vec<i16> {
         let mut pixels = Vec::new();
 
         for (position, pixel) in self.pixels.iter().enumerate() {
@@ -104,14 +104,36 @@ impl Image {
                 sum += value as f64 * kernel[0][0];
             }
 
-            pixels.push(sum as u8);
+            pixels.push(sum as i16);
         }
 
-        Self { pixels, width: self.width }
+        pixels
     }
 
     pub fn mean_filter(&self) -> Self {
-        self.convolve(&MEAN_KERNEL)
+        let pixels = self
+            .convolve(&MEAN_KERNEL)
+            .into_iter()
+            .map(|pixel| pixel as u8)
+            .collect();
+
+        Self {
+            pixels,
+            width: self.width,
+        }
+    }
+
+    pub fn laplacian_filter(&self) -> Self {
+        let pixels = self
+            .convolve(&LAPLACIAN_KERNEL)
+            .into_iter()
+            .map(|pixel| if pixel >= 0 { 255 } else { 0 })
+            .collect();
+
+        Self {
+            pixels,
+            width: self.width,
+        }
     }
 
     pub fn save(&self, path: &str) -> io::Result<()> {
@@ -134,4 +156,6 @@ impl Image {
 
 pub type Kernel = [[f64; 3]; 3];
 
-pub const MEAN_KERNEL: Kernel = [[1./9.; 3]; 3];
+pub const MEAN_KERNEL: Kernel = [[1. / 9.; 3]; 3];
+
+pub const LAPLACIAN_KERNEL: Kernel = [[0., -1., 0.], [-1., 4., -1.], [0., -1., 0.]];
