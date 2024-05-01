@@ -127,7 +127,15 @@ impl Image {
         let pixels = self
             .convolve(&LAPLACIAN_KERNEL)
             .into_iter()
-            .map(|pixel| if pixel >= 0 { 255 } else { 0 })
+            .map(|pixel| {
+                if pixel > 255 {
+                    255
+                } else if pixel < 0 {
+                    0
+                } else {
+                    pixel as u8
+                }
+            })
             .collect();
 
         Self {
