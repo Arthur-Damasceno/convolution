@@ -144,11 +144,11 @@ impl Image {
         }
     }
 
-    pub fn treshold(&self, value: u8) -> Self {
+    pub fn threshold(&self, thresh: u8) -> Self {
         let pixels = self
             .pixels
             .iter()
-            .map(|pixel| if pixel >= &value { 255 } else { 0 })
+            .map(|pixel| if pixel >= &thresh { 255 } else { 0 })
             .collect();
 
         Self {
