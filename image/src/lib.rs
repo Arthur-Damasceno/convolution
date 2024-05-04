@@ -124,18 +124,20 @@ impl Image {
     }
 
     pub fn laplacian_filter(&self) -> Self {
-        let pixels = self
-            .convolve(&LAPLACIAN_KERNEL)
+        let convolution = self.convolve(&LAPLACIAN_KERNEL);
+        let (mut max, mut min) = (0, 255);
+
+        for pixel in &convolution {
+            if *pixel > max {
+                max = *pixel;
+            } else if *pixel < min {
+                min = *pixel;
+            }
+        }
+
+        let pixels = convolution
             .into_iter()
-            .map(|pixel| {
-                if pixel > 255 {
-                    255
-                } else if pixel < 0 {
-                    0
-                } else {
-                    pixel as u8
-                }
-            })
+            .map(|pixel| Self::normalize_pixel(pixel, (max, min)))
             .collect();
 
         Self {
@@ -155,6 +157,36 @@ impl Image {
             pixels,
             width: self.width,
         }
+    }
+
+    pub fn normalize(&self) -> Self {
+        let (mut max, mut min) = (0, 255);
+
+        for pixel in &self.pixels {
+            if *pixel > max {
+                max = *pixel;
+            } else if *pixel < min {
+                min = *pixel;
+            }
+        }
+
+        let pixels = self
+            .pixels
+            .clone()
+            .into_iter()
+            .map(|pixel| Self::normalize_pixel(pixel as i16, (max as i16, min as i16)))
+            .collect();
+
+        Self {
+            pixels,
+            width: self.width,
+        }
+    }
+
+    fn normalize_pixel(pixel: i16, (max, min): (i16, i16)) -> u8 {
+        let interval = (max - min) as f64;
+
+        (((pixel - min) as f64 / interval) * 255.) as u8
     }
 
     pub fn save(&self, path: &str) -> io::Result<()> {

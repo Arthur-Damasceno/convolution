@@ -18,6 +18,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         'M' => image.mean_filter(),
         'L' => image.laplacian_filter(),
         'T' => image.threshold(thresh),
+        'N' => image.normalize(),
         _ => panic!("Invalid operation"),
     };
 
